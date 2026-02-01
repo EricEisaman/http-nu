@@ -3,6 +3,7 @@
 # Run with: cat examples/basic.nu | http-nu :3001 -
 
 {|req|
+  let body = $in
   match $req.path {
     # Home page
     "/" => {
@@ -36,7 +37,7 @@
     "/echo" => {
       if $req.method == "POST" {
         # Return the request body
-        $in
+        $body
       } else {
         "<html><body>
           <h1>Echo Service</h1>

@@ -55,7 +55,8 @@ def quote-html []: record -> record {
 
     (
       route {method: POST path: "/"} {|req ctx|
-        $in | from json | .append quotes --meta $in
+        let body = $in
+        $body | from json | .append quotes --meta $body
         null | metadata set --merge {'http.response': {status: 204}}
       }
     )
