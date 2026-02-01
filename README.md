@@ -19,8 +19,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/cablehead/http-nu/actions/workflows/ci.yml">
-    <img src="https://github.com/cablehead/http-nu/actions/workflows/ci.yml/badge.svg" alt="CI">
+  <a href="https://github.com/EricEisaman/http-nu/actions/workflows/ci.yml">
+    <img src="https://github.com/EricEisaman/http-nu/actions/workflows/ci.yml/badge.svg" alt="CI">
   </a>
   <a href="https://discord.com/invite/YNbScHBHrh">
     <img src="https://img.shields.io/discord/1182364431435436042?logo=discord" alt="Discord">
@@ -73,6 +73,7 @@
   - [Available Build Targets](#available-build-targets)
   - [Examples](#examples)
   - [GitHub Releases](#github-releases)
+- [Deployment to Render.com](#deployment-to-render-com)
 - [History](#history)
 
 <!-- END mktoc -->
@@ -82,7 +83,7 @@
 ### [eget](https://github.com/zyedidia/eget)
 
 ```bash
-eget cablehead/http-nu
+eget EricEisaman/http-nu
 ```
 
 ### Homebrew (macOS)
@@ -983,6 +984,20 @@ directory.
 The GitHub workflow automatically builds all platforms and creates releases when
 you push a version tag (e.g., `v1.0.0`). Development tags containing `-dev.` are
 marked as prereleases.
+
+## Deployment to Render.com
+
+Deploying `http-nu` to Render is automated via the included `render.yaml` Blueprint.
+
+1.  **Push** this repository to your GitHub account.
+2.  In the [Render Dashboard](https://dashboard.render.com), click **New > Blueprint**.
+3.  Connect your repository.
+4.  Render will automatically deploy the service with:
+    -   **Multi-Example Routing**: All examples are live at `/examples/*` (e.g., `/examples/basic`).
+    -   **State Persistence**: A 1GB disk is mounted for the cross-stream store.
+    -   **Health Probes**: Automatic monitoring via `/health`.
+
+For a full step-by-step guide, see [RENDER_DEPLOYMENT_CHECKLIST.md](.agent/artifacts/RENDER_DEPLOYMENT_CHECKLIST.md).
 
 ## History
 
