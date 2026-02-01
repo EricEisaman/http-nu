@@ -56,7 +56,16 @@
       generate {|_|
         sleep 1sec
         {out: $"Current time: (date now | format date '%Y-%m-%d %H:%M:%S')\n" next: true}
-      } true | metadata set --content-type "text/plain"
+      } true 
+      | metadata set --content-type "text/plain" 
+      | metadata set --merge {
+          'http.response': {
+            headers: {
+              'Cache-Control': 'no-cache',
+              'X-Accel-Buffering': 'no'
+            }
+          }
+        }
     }
 
     # Show request info
