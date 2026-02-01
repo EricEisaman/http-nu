@@ -96,3 +96,12 @@ let body = if ($raw | is-empty) { "" } else { $raw | decode utf-8 }
 ### 5. Loose Type Signatures
 **Problem:** Strict Nushell return types (e.g., `-> record`) in helper functions can cause parse errors if the pipeline input varies (e.g. `any` vs `nothing`).
 **Solution:** Prefer omitting type signatures or using `any` for internal helper functions.
+
+### 6. Ephemeral Store Initialization
+**Problem:** Cloud deployments (like Render) usually start with an empty ephemeral filesystem, meaning your app starts with no data.
+**Solution:** Seed the store during container startup via the `CMD` instruction.
+```dockerfile
+# Dockerfile
+CMD ["sh", "-c", "cat seed.nu | http-nu --store /app/store --oneshot; http-nu ..."]
+```
+**Impact:** Guarantees "dat store be generated" on every deployment.
