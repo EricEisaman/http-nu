@@ -71,7 +71,7 @@ use http-nu/html *
       route {method: POST path: "/increment"} {|req ctx|
         let body = ($in | default 0x[] | into binary | decode utf-8)
         let signals = ($body | from datastar-signals $req)
-        let count = ($signals.count? | default 0) + 1
+        let count = ($signals.count? | default 0 | into int) + 1
         {count: $count} | to datastar-patch-signals | to sse
       }
     )
