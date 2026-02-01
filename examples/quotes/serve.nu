@@ -2,7 +2,7 @@ use http-nu/router *
 use http-nu/datastar *
 use http-nu/html *
 
-def quote-html []: record -> record {
+def quote-html [] {
   let q = $in
   (
     DIV {
