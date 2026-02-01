@@ -17,6 +17,12 @@ def strip-prefix [prefix: string]: record -> record {
   $req | update path $new_path | update uri $new_path
 }
 
+# Helper: Check if path starts with a prefix (supports exact match or sub-paths)
+def prefix-match [prefix: string]: record -> any {
+  let path = $in.path
+  if ($path == $prefix) or ($path | str starts-with $"($prefix)/") { {} } else { null }
+}
+
 # ============================================================================
 # Main Request Handler
 # ============================================================================
@@ -270,39 +276,37 @@ def strip-prefix [prefix: string]: record -> record {
     # ========================================================================
     
     # Basic Example - Simple routing and responses
-    (route {path-matches: "/examples/basic*"} {|req ctx|
+    (route {|req| $req | prefix-match "/examples/basic"} {|req ctx|
       let modified_req = ($req | strip-prefix "/examples/basic")
       let handler = (source "examples/basic.nu")
       do $handler $modified_req
     })
     
     # Quotes Example - SSE, Datastar, and Store
-    (route {path-matches: "/examples/quotes*"} {|req ctx|
+    (route {|req| $req | prefix-match "/examples/quotes"} {|req ctx|
       let modified_req = ($req | strip-prefix "/examples/quotes")
       let handler = (source "examples/quotes/serve.nu")
       do $handler $modified_req
     })
     
     # Datastar SDK Example
-    (route {path-matches: "/examples/datastar*"} {|req ctx|
+    (route {|req| $req | prefix-match "/examples/datastar"} {|req ctx|
       let modified_req = ($req | strip-prefix "/examples/datastar")
       let handler = (source "examples/datastar-sdk/serve.nu")
       do $handler $modified_req
     })
     
     # Datastar Test Example
-    (route {path-matches: "/examples/datastar-test*"} {|req ctx|
+    (route {|req| $req | prefix-match "/examples/datastar-test"} {|req ctx|
       let modified_req = ($req | strip-prefix "/examples/datastar-test")
       let handler = (source "examples/datastar-sdk-test/serve.nu")
       do $handler $modified_req
     })
     
     # Template Inheritance Example
-    (route {path-matches: "/examples/templates*"} {|req ctx|
+    (route {|req| $req | prefix-match "/examples/templates"} {|req ctx|
       let modified_req = ($req | strip-prefix "/examples/templates")
-      # For template example, we need to handle the working directory
-      # since templates reference files relatively
-      cd examples/template-inheritance
+      # Note: We avoid 'cd' here to prevent race conditions in multi-threaded env
       let handler = (source "examples/template-inheritance/serve.nu")
       do $handler $modified_req
     })
