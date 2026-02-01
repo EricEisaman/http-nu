@@ -29,7 +29,7 @@
   ```
 - [ ] Run container with store:
   ```bash
-  docker run -p 3001:3001 -e PORT=3001 -v http-nu-store:/data http-nu:test
+  docker run -p 3001:3001 -e PORT=3001 -v http-nu-store:/app/store http-nu:test
   ```
 - [ ] Test all endpoints:
   - [ ] `curl http://localhost:3001/` (Landing page)
@@ -68,7 +68,7 @@ git push origin main
    - Service type: **Web Service**
    - Runtime: **Docker**
    - Plan: **Starter** ($7/month)
-   - Disk: **1GB** at `/data`
+   - Disk: **1GB** at `/app/store`
    - Environment variables: `LOG_FORMAT=jsonl`, `RUST_LOG=info`
 
 ### Step 4: Deploy
@@ -252,7 +252,7 @@ To disable auto-deploy:
 
 **Solutions**:
 - Verify disk mount in render.yaml
-- Check `--store /data/store` flag in CMD
+- Check `--store /app/store` flag in CMD
 - Ensure disk path is writable
 - Review store initialization logs
 

@@ -100,8 +100,8 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:${PORT}/health || exit 1
 
 # Default command - runs production handler with all examples
-# Store is created at /data/store for quotes example
-CMD ["sh", "-c", "http-nu --store /data/store :${PORT} /app/serve.nu"]
+# Store is created at /app/store (writable by http-nu user)
+CMD ["sh", "-c", "http-nu --store /app/store :${PORT} /app/serve.nu"]
 
 # ============================================================================
 # Build Instructions:

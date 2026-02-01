@@ -175,7 +175,7 @@ docker build -t http-nu:test .
 # Run with volume for store
 docker run -p 3001:3001 \
   -e PORT=3001 \
-  -v http-nu-store:/data \
+  -v http-nu-store:/app/store \
   http-nu:test
 
 # Test endpoints
@@ -268,14 +268,14 @@ The quotes example requires the cross-stream store:
 
 **Dockerfile**:
 ```dockerfile
-CMD ["sh", "-c", "http-nu --store /data/store :${PORT} /app/serve.nu"]
+CMD ["sh", "-c", "http-nu --store /app/store :${PORT} /app/serve.nu"]
 ```
 
 **render.yaml**:
 ```yaml
 disk:
   name: http-nu-store
-  mountPath: /data
+  mountPath: /app/store
   sizeGB: 1
 ```
 
@@ -411,7 +411,7 @@ This is because templates reference files with relative paths.
 
 The Dockerfile CMD handles this automatically:
 ```dockerfile
-CMD ["sh", "-c", "http-nu --store /data/store :${PORT} /app/serve.nu"]
+CMD ["sh", "-c", "http-nu --store /app/store :${PORT} /app/serve.nu"]
 ```
 
 ---
