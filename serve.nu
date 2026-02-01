@@ -9,14 +9,6 @@ use http-nu/html *
 # Helper Functions
 # ============================================================================
 
-# Strip a path prefix and return modified request
-def strip-prefix [prefix: string]: record -> record {
-  let req = $in
-  let new_path = ($req.path | str replace $prefix "")
-  let new_path = if ($new_path | is-empty) { "/" } else { $new_path }
-  $req | update path $new_path | update uri $new_path
-}
-
 # Helper: Generate a modified request with stripped prefix
 def strip-prefix [prefix: string]: record -> record {
   let req = $in
