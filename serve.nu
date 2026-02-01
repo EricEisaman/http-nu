@@ -215,6 +215,15 @@ def prefix-match [prefix: string] {
     })
     
     # ========================================================================
+    # Redirects
+    # ========================================================================
+
+    # Redirect /examples/ to root
+    (route {|req| $req.path in ["/examples", "/examples/"]} {|req ctx|
+      "Redirecting..." | metadata set --merge {'http.response': {status: 301, headers: {Location: "/"}}}
+    })
+    
+    # ========================================================================
     # Error Handlers
     # ========================================================================
     
