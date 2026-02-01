@@ -105,4 +105,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 
 # Default command - runs production handler with all examples
 # We bind explicitly to 0.0.0.0:${PORT} for Render compatibility
-CMD ["sh", "-c", "http-nu --store /app/store 0.0.0.0:${PORT} /app/serve.nu"]
+CMD ["sh", "-c", "cat examples/quotes/seed.nu | http-nu --store /app/store --oneshot; http-nu --store /app/store 0.0.0.0:${PORT} /app/serve.nu"]
