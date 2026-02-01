@@ -8,6 +8,9 @@ use http-nu/html *
       HTML [
         (HEAD [
           (TITLE "Basic Demo - http-nu")
+          (LINK {rel: "icon" href: "/assets/favicon.ico" sizes: "32x32"})
+          (LINK {rel: "icon" href: "/assets/icon.webp" type: "image/webp"})
+          (LINK {rel: "apple-touch-icon" href: "/assets/apple-touch-icon-152x152.png"})
           (LINK {rel: "stylesheet" href: "/assets/core.css"})
         ])
         (BODY {class: "p-8 max-w-2xl mx-auto"} [

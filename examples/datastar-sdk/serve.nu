@@ -13,6 +13,9 @@ use http-nu/html *
             HEAD
             (META {charset: "UTF-8"})
             (TITLE "Datastar SDK Demo - http-nu")
+            (LINK {rel: "icon" href: "/assets/favicon.ico" sizes: "32x32"})
+            (LINK {rel: "icon" href: "/assets/icon.webp" type: "image/webp"})
+            (LINK {rel: "apple-touch-icon" href: "/assets/apple-touch-icon-152x152.png"})
             (LINK {rel: "stylesheet" href: "/assets/core.css"})
             (SCRIPT {type: "module" src: $DATASTAR_CDN_URL})
           )
