@@ -53,7 +53,7 @@ def quote-html [] {
             (SCRIPT {type: "module" src: $DATASTAR_CDN_URL})
           )
           (
-            BODY {data-init: "@get('')", class: "p-4"}
+            BODY {data-on-load: "@get('.')", class: "p-4"}
             (DIV {class: "max-w-4xl mx-auto"} [
                (HEADER {class: "mb-12 pt-12 text-center"} [
                  (H1 {class: "text-4xl font-bold tracking-wide text-header shadow-offset rotate-ccw-1"} "Live Quotes")
