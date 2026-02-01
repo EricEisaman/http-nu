@@ -186,7 +186,7 @@ def prefix-match [prefix: string]: record -> any {
               (DIV {class: "examples"} [
                 # Basic Example
                 (DIV {class: "example"} [
-                  (H3 (A {href: "/examples/basic"} [
+                  (H3 (A {href: "/examples/basic/"} [
                     "Basic HTTP Server"
                     (SPAN {class: "arrow"} "→")
                   ]))
@@ -200,7 +200,7 @@ def prefix-match [prefix: string]: record -> any {
                 
                 # Quotes Example
                 (DIV {class: "example"} [
-                  (H3 (A {href: "/examples/quotes"} [
+                  (H3 (A {href: "/examples/quotes/"} [
                     "Live Quotes"
                     (SPAN {class: "arrow"} "→")
                   ]))
@@ -215,7 +215,7 @@ def prefix-match [prefix: string]: record -> any {
                 
                 # Datastar SDK Example
                 (DIV {class: "example"} [
-                  (H3 (A {href: "/examples/datastar"} [
+                  (H3 (A {href: "/examples/datastar/"} [
                     "Datastar SDK Demo"
                     (SPAN {class: "arrow"} "→")
                   ]))
@@ -229,7 +229,7 @@ def prefix-match [prefix: string]: record -> any {
                 
                 # Datastar Test Example
                 (DIV {class: "example"} [
-                  (H3 (A {href: "/examples/datastar-test"} [
+                  (H3 (A {href: "/examples/datastar-test/"} [
                     "Datastar Tests"
                     (SPAN {class: "arrow"} "→")
                   ]))
@@ -242,7 +242,7 @@ def prefix-match [prefix: string]: record -> any {
                 
                 # Template Inheritance Example
                 (DIV {class: "example"} [
-                  (H3 (A {href: "/examples/templates"} [
+                  (H3 (A {href: "/examples/templates/"} [
                     "Template Inheritance"
                     (SPAN {class: "arrow"} "→")
                   ]))
@@ -278,7 +278,7 @@ def prefix-match [prefix: string]: record -> any {
     # Basic Example - Simple routing and responses
     (route {|req| $req | prefix-match "/examples/basic"} {|req ctx|
       if $req.path == "/examples/basic" { 
-        return ("" | metadata set --merge {'http.response': {status: 301, headers: {location: "/examples/basic/"}}})
+        return ("Redirecting..." | metadata set --merge {'http.response': {status: 301, headers: {Location: "/examples/basic/"}}})
       }
       let modified_req = ($req | strip-prefix "/examples/basic")
       let handler = (source "examples/basic.nu")
@@ -288,7 +288,7 @@ def prefix-match [prefix: string]: record -> any {
     # Quotes Example - SSE, Datastar, and Store
     (route {|req| $req | prefix-match "/examples/quotes"} {|req ctx|
       if $req.path == "/examples/quotes" { 
-        return ("" | metadata set --merge {'http.response': {status: 301, headers: {location: "/examples/quotes/"}}})
+        return ("Redirecting..." | metadata set --merge {'http.response': {status: 301, headers: {Location: "/examples/quotes/"}}})
       }
       let modified_req = ($req | strip-prefix "/examples/quotes")
       let handler = (source "examples/quotes/serve.nu")
@@ -298,7 +298,7 @@ def prefix-match [prefix: string]: record -> any {
     # Datastar SDK Example
     (route {|req| $req | prefix-match "/examples/datastar"} {|req ctx|
       if $req.path == "/examples/datastar" { 
-        return ("" | metadata set --merge {'http.response': {status: 301, headers: {location: "/examples/datastar/"}}})
+        return ("Redirecting..." | metadata set --merge {'http.response': {status: 301, headers: {Location: "/examples/datastar/"}}})
       }
       let modified_req = ($req | strip-prefix "/examples/datastar")
       let handler = (source "examples/datastar-sdk/serve.nu")
@@ -308,7 +308,7 @@ def prefix-match [prefix: string]: record -> any {
     # Datastar Test Example
     (route {|req| $req | prefix-match "/examples/datastar-test"} {|req ctx|
       if $req.path == "/examples/datastar-test" { 
-        return ("" | metadata set --merge {'http.response': {status: 301, headers: {location: "/examples/datastar-test/"}}})
+        return ("Redirecting..." | metadata set --merge {'http.response': {status: 301, headers: {Location: "/examples/datastar-test/"}}})
       }
       let modified_req = ($req | strip-prefix "/examples/datastar-test")
       let handler = (source "examples/datastar-sdk-test/serve.nu")
@@ -318,12 +318,12 @@ def prefix-match [prefix: string]: record -> any {
     # Template Inheritance Example
     (route {|req| $req | prefix-match "/examples/templates"} {|req ctx|
       if $req.path == "/examples/templates" { 
-        return ("" | metadata set --merge {'http.response': {status: 301, headers: {location: "/examples/templates/"}}})
+        return ("Redirecting..." | metadata set --merge {'http.response': {status: 301, headers: {Location: "/examples/templates/"}}})
       }
       let modified_req = ($req | strip-prefix "/examples/templates")
-      # Note: We avoid 'cd' here to prevent race conditions in multi-threaded env
-      let handler = (source "examples/template-inheritance/serve.nu")
-      do $handler $modified_req
+      # Note: Instead of source/do, we directly execute the MJ command with the correct base path.
+      # This allows Minijinja's loader to find base.html and nav.html automatically.
+      { name: "World" } | .mj "examples/template-inheritance/page.html"
     })
     
     # ========================================================================
