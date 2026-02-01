@@ -51,8 +51,26 @@ use http-nu/html *
     # Echo POST data
     "/echo" => {
       if $req.method == "POST" {
-        # Return the request body
-        $body
+        # Return the request body wrapped in HTML
+        HTML [
+          (HEAD [
+            (TITLE "Echo Response - http-nu")
+            (LINK {rel: "icon" href: "/assets/favicon.ico" sizes: "32x32"})
+            (LINK {rel: "icon" href: "/assets/icon.webp" type: "image/webp"})
+            (LINK {rel: "apple-touch-icon" href: "/assets/apple-touch-icon-152x152.png"})
+            (LINK {rel: "stylesheet" href: "/assets/core.css"})
+          ])
+          (BODY {class: "p-8 max-w-2xl mx-auto"} [
+            (H1 {class: "text-4xl font-bold text-header mb-8 shadow-offset rotate-ccw-1"} "Echo Response")
+            (DIV {class: "bg-dark p-6 rounded-lg shadow-float mb-8 border border-purple"} [
+              (H3 {class: "text-xl font-bold text-accent mb-4"} "Received Data:")
+              (PRE {class: "bg-black bg-opacity-30 p-4 rounded overflow-x-auto font-mono text-sm"} $body)
+            ])
+            (FOOTER {class: "mt-12 pt-8 border-t border-white border-opacity-10"} [
+              (A {href: "echo", class: "opacity-60"} "← Send Another Echo")
+            ])
+          ])
+        ] | get __html
       } else {
         HTML [
           (HEAD [
