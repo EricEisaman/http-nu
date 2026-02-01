@@ -33,8 +33,8 @@ changes/
 *.md
 !README.md
 
-# Tests and benchmarks
-tests/
+# Tests and benchmarks (MUST KEEP tests/ if it contains workspace members)
+# tests/
 benchmarks/
 
 # Examples - KEEP THESE! We need them in the production image
