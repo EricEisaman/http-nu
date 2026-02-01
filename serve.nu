@@ -17,15 +17,12 @@ def strip-prefix [prefix: string]: record -> record {
   $req | update path $new_path | update uri $new_path
 }
 
-# Mount an example by sourcing its handler and forwarding the request
-def mount-example [
-  req: record
-  prefix: string
-  handler_path: string
-]: nothing -> any {
-  let modified_req = ($req | strip-prefix $prefix)
-  let handler = (source $handler_path)
-  do $handler $modified_req
+# Helper: Generate a modified request with stripped prefix
+def strip-prefix [prefix: string]: record -> record {
+  let req = $in
+  let new_path = ($req.path | str replace $prefix "")
+  let new_path = if ($new_path | is-empty) { "/" } else { $new_path }
+  $req | update path $new_path | update uri $new_path
 }
 
 # ============================================================================
@@ -282,30 +279,40 @@ def mount-example [
     
     # Basic Example - Simple routing and responses
     (route {path-matches: "/examples/basic*"} {|req ctx|
-      mount-example $req "/examples/basic" "examples/basic.nu"
+      let modified_req = ($req | strip-prefix "/examples/basic")
+      let handler = (source "examples/basic.nu")
+      do $handler $modified_req
     })
     
     # Quotes Example - SSE, Datastar, and Store
     (route {path-matches: "/examples/quotes*"} {|req ctx|
-      mount-example $req "/examples/quotes" "examples/quotes/serve.nu"
+      let modified_req = ($req | strip-prefix "/examples/quotes")
+      let handler = (source "examples/quotes/serve.nu")
+      do $handler $modified_req
     })
     
     # Datastar SDK Example
     (route {path-matches: "/examples/datastar*"} {|req ctx|
-      mount-example $req "/examples/datastar" "examples/datastar-sdk/serve.nu"
+      let modified_req = ($req | strip-prefix "/examples/datastar")
+      let handler = (source "examples/datastar-sdk/serve.nu")
+      do $handler $modified_req
     })
     
     # Datastar Test Example
     (route {path-matches: "/examples/datastar-test*"} {|req ctx|
-      mount-example $req "/examples/datastar-test" "examples/datastar-sdk-test/serve.nu"
+      let modified_req = ($req | strip-prefix "/examples/datastar-test")
+      let handler = (source "examples/datastar-sdk-test/serve.nu")
+      do $handler $modified_req
     })
     
     # Template Inheritance Example
     (route {path-matches: "/examples/templates*"} {|req ctx|
+      let modified_req = ($req | strip-prefix "/examples/templates")
       # For template example, we need to handle the working directory
       # since templates reference files relatively
       cd examples/template-inheritance
-      mount-example $req "/examples/templates" "examples/template-inheritance/serve.nu"
+      let handler = (source "examples/template-inheritance/serve.nu")
+      do $handler $modified_req
     })
     
     # ========================================================================
@@ -345,7 +352,7 @@ def mount-example [
 #   http-nu --store ./store :3001 ./serve.nu
 #
 # Production (Render.com):
-#   http-nu --store /data/store :${PORT} /app/serve.nu
+#   http-nu --store /app/store :${PORT} /app/serve.nu
 #
 # Test endpoints:
 #   curl http://localhost:3001/
