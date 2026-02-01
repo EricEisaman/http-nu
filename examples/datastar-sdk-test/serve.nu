@@ -52,5 +52,15 @@ def handle-event [event: record] {
         $events | each {|event| handle-event $event } | to sse
       }
     )
+
+    (
+      route {path: "/"} {|req ctx|
+        "<html><body>
+          <h1>Datastar SDK Test Endpoint</h1>
+          <p>This endpoint is used for running the Datastar SDK compliance tests.</p>
+          <p>The test runner should point to <code>/test</code>.</p>
+        </body></html>"
+      }
+    )
   ]
 }
