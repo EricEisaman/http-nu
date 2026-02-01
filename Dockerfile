@@ -1,5 +1,5 @@
-# Sample Dockerfile for http-nu
-# This is a reference implementation showing the recommended multi-stage build approach
+# Production Dockerfile for http-nu
+# Multi-stage build for minimal image size and fast build caching
 
 # ============================================================================
 # Stage 1: Dependency Planner (cargo-chef)
@@ -64,6 +64,7 @@ FROM debian:bookworm-slim AS runtime
 RUN apt-get update && apt-get install -y \
     ca-certificates \
     libssl3 \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Create non-root user
@@ -95,17 +96,10 @@ ENV PORT=3001 \
     LOG_FORMAT=jsonl \
     RUST_LOG=info
 
-# Health check
+# Health check (internal to container)
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost:${PORT}/health || exit 1
 
 # Default command - runs production handler with all examples
-# Store is created at /app/store (writable by http-nu user)
-CMD ["sh", "-c", "http-nu --store /app/store :${PORT} /app/serve.nu"]
-
-# ============================================================================
-# Build Instructions:
-# ============================================================================
-# docker build -t http-nu:latest .
-# docker run -p 3001:3001 http-nu:latest
-# docker run -p 3001:3001 -v $(pwd)/serve.nu:/app/serve.nu http-nu:latest http-nu :3001 /app/serve.nu
+# We bind explicitly to 0.0.0.0:${PORT} for Render compatibility
+CMD ["sh", "-c", "http-nu --store /app/store 0.0.0.0:${PORT} /app/serve.nu"]
