@@ -34,7 +34,7 @@ def quote-html [] {
 
     (
       route {method: POST path: "/"} {|req ctx|
-        let body = $in
+        let body = ($in | decode utf-8)
         $body | from json | .append quotes --meta $body
         null | metadata set --merge {'http.response': {status: 204}}
       }
