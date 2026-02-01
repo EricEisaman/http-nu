@@ -62,8 +62,8 @@ docker-compose*.yml
 # Scripts (unless needed at runtime)
 scripts/
 
-# WWW assets (unless serving static files)
-www/
+# WWW assets (needed for serving static files)
+# www/
 
 # Keep these files (they ARE needed for the build):
 # - Cargo.toml
