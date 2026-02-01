@@ -97,7 +97,7 @@ export def "to datastar-redirect" []: string -> record {
 # Usage: $in | from datastar-signals $req
 export def "from datastar-signals" [req: record]: any -> record {
   match $req.method {
-    "POST" => (try { $in | from json } catch { {} })
+    "POST" => (try { if ($in | is-empty) { {} } else { $in | from json } } catch { {} })
     _ => (try { $req.query.datastar? | default "{}" | from json } catch { {} })
   }
 }
