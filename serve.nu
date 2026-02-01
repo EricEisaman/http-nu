@@ -31,7 +31,8 @@ def prefix-match [prefix: string]: record -> any {
   dispatch $req [
     # Static Assets
     (route {|req| $req | prefix-match "/assets"} {|req ctx|
-      .static "www/assets" ($req | strip-prefix "/assets")
+      let modified = ($req | strip-prefix "/assets")
+      .static "www/assets" $modified.path
     })
 
     # ========================================================================
