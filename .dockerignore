@@ -1,0 +1,74 @@
+# .dockerignore for http-nu
+# Excludes unnecessary files from Docker build context to speed up builds
+
+# Build artifacts
+target/
+*.log
+build.log
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# CI/CD
+.github/
+.dagger/
+dagger.json
+
+# Development tools
+.vscode/
+.idea/
+.claude/
+.agent/
+*.swp
+*.swo
+*~
+
+# Documentation (keep only essential files)
+docs/
+CLAUDE.md
+NIXOS_PACKAGING_GUIDE.md
+changes/
+*.md
+!README.md
+
+# Tests and benchmarks
+tests/
+benchmarks/
+
+# Examples - KEEP THESE! We need them in the production image
+# examples/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Rust-specific
+**/*.rs.bk
+*.pdb
+
+# Docker files (don't need these inside the image)
+Dockerfile*
+.dockerignore
+docker-compose*.yml
+
+# Scripts (unless needed at runtime)
+scripts/
+
+# WWW assets (unless serving static files)
+www/
+
+# Keep these files (they ARE needed for the build):
+# - Cargo.toml
+# - Cargo.lock
+# - src/
+# - build.rs
+# - syntaxes/
+# - LICENSE (optional but good practice)
