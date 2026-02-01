@@ -10,7 +10,7 @@ use http-nu/html *
 # ============================================================================
 
 # Helper: Generate a modified request with stripped prefix
-def strip-prefix [prefix: string]: record -> record {
+def strip-prefix [prefix: string] {
   let req = $in
   let new_path = ($req.path | str replace $prefix "")
   let new_path = if ($new_path | is-empty) { "/" } else { $new_path }
@@ -18,7 +18,7 @@ def strip-prefix [prefix: string]: record -> record {
 }
 
 # Helper: Check if path starts with a prefix (supports exact match or sub-paths)
-def prefix-match [prefix: string]: record -> any {
+def prefix-match [prefix: string] {
   let path = $in.path
   if ($path == $prefix) or ($path | str starts-with $"($prefix)/") { {} } else { null }
 }
