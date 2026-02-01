@@ -277,6 +277,9 @@ def prefix-match [prefix: string]: record -> any {
     
     # Basic Example - Simple routing and responses
     (route {|req| $req | prefix-match "/examples/basic"} {|req ctx|
+      if $req.path == "/examples/basic" { 
+        return ("" | metadata set --merge {'http.response': {status: 301, headers: {location: "/examples/basic/"}}})
+      }
       let modified_req = ($req | strip-prefix "/examples/basic")
       let handler = (source "examples/basic.nu")
       do $handler $modified_req
@@ -284,6 +287,9 @@ def prefix-match [prefix: string]: record -> any {
     
     # Quotes Example - SSE, Datastar, and Store
     (route {|req| $req | prefix-match "/examples/quotes"} {|req ctx|
+      if $req.path == "/examples/quotes" { 
+        return ("" | metadata set --merge {'http.response': {status: 301, headers: {location: "/examples/quotes/"}}})
+      }
       let modified_req = ($req | strip-prefix "/examples/quotes")
       let handler = (source "examples/quotes/serve.nu")
       do $handler $modified_req
@@ -291,6 +297,9 @@ def prefix-match [prefix: string]: record -> any {
     
     # Datastar SDK Example
     (route {|req| $req | prefix-match "/examples/datastar"} {|req ctx|
+      if $req.path == "/examples/datastar" { 
+        return ("" | metadata set --merge {'http.response': {status: 301, headers: {location: "/examples/datastar/"}}})
+      }
       let modified_req = ($req | strip-prefix "/examples/datastar")
       let handler = (source "examples/datastar-sdk/serve.nu")
       do $handler $modified_req
@@ -298,6 +307,9 @@ def prefix-match [prefix: string]: record -> any {
     
     # Datastar Test Example
     (route {|req| $req | prefix-match "/examples/datastar-test"} {|req ctx|
+      if $req.path == "/examples/datastar-test" { 
+        return ("" | metadata set --merge {'http.response': {status: 301, headers: {location: "/examples/datastar-test/"}}})
+      }
       let modified_req = ($req | strip-prefix "/examples/datastar-test")
       let handler = (source "examples/datastar-sdk-test/serve.nu")
       do $handler $modified_req
@@ -305,6 +317,9 @@ def prefix-match [prefix: string]: record -> any {
     
     # Template Inheritance Example
     (route {|req| $req | prefix-match "/examples/templates"} {|req ctx|
+      if $req.path == "/examples/templates" { 
+        return ("" | metadata set --merge {'http.response': {status: 301, headers: {location: "/examples/templates/"}}})
+      }
       let modified_req = ($req | strip-prefix "/examples/templates")
       # Note: We avoid 'cd' here to prevent race conditions in multi-threaded env
       let handler = (source "examples/template-inheritance/serve.nu")

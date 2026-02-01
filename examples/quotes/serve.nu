@@ -72,7 +72,7 @@ def quote-html []: record -> record {
             (SCRIPT {type: "module" src: $DATASTAR_CDN_URL})
           )
           (
-            BODY {data-init: "@get('/')"}
+            BODY {data-init: "@get('')"}
             ({quote: "Waiting for quotes..."} | quote-html)
           )
         )
