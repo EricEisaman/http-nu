@@ -185,19 +185,34 @@ curl http://localhost:3001/examples/basic      # Basic example
 curl http://localhost:3001/examples/quotes     # Quotes example
 ```
 
-### Step 3: Deploy to Render.com
+### Step 3: Deploy to Render.com (Free Plan)
 
-1. **Update render.yaml**: Change the repo URL to your GitHub repository
-2. **Commit and push** all files to GitHub
-3. **Create Render account** at https://render.com
-4. **Create new Web Service**:
-   - Connect your GitHub repository
-   - Render will auto-detect `render.yaml`
-   - Click "Create Web Service"
-5. **Wait for deployment** (8-15 minutes)
-6. **Access your app** at `https://your-app.onrender.com`
+Users on the **Render Free Plan** must set up the service manually as Blueprints are not available.
+
+1.  **Dashboard**: In the [Render Dashboard](https://dashboard.render.com), click **New > Web Service**.
+2.  **Connect Repo**: Connect your `http-nu` repository.
+3.  **Service Settings**:
+    -   **Runtime**: Select **Docker** (This is crucial to avoid "cargo not found" errors).
+    -   **Plan**: Select **Free**.
+4.  **Environment Variables**: Add `LOG_FORMAT=jsonl`.
+5.  **Deploy**: Click **Create Web Service**.
+
+> [!IMPORTANT]
+> **Free Tier Limitation**: Render's free plan does not support persistent disks. The **Quotes** example will function, but data will be ephemeral and will reset whenever the service restarts or redeploys.
 
 ---
+
+## 💰 Cost Estimate
+
+### Deployment/Testing
+- **Local Docker**: Free
+- **Render Free Tier**: $0/month (Stateless, sleeps after 15min of inactivity)
+
+### Production (Recommended)
+- **Render Starter**: $7/month
+  - 512MB RAM
+  - Always on (no sleep)
+  - 1GB persistent disk included (required for Quotes persistence)
 
 ## 📊 Example Endpoints
 

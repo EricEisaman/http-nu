@@ -985,25 +985,29 @@ The GitHub workflow automatically builds all platforms and creates releases when
 you push a version tag (e.g., `v1.0.0`). Development tags containing `-dev.` are
 marked as prereleases.
 
-## Render Deployment
+## Render Deployment (Free Plan)
 
-`http-nu` is optimized for zero-config deployment on **Render.com** using the included [Blueprint configuration](render.yaml).
+`http-nu` is ready for deployment on **Render.com** using the included `Dockerfile`. Note that users on the **Free Plan** must set up the service manually as Blueprints are not available.
 
-### Quick Start
+### Manual Setup Steps
 
-1.  **Fork/Push**: Ensure this repository is on your GitHub account.
-2.  **Blueprint**: From the [Render Dashboard](https://dashboard.render.com), select **New > Blueprint**.
-3.  **Connect**: Connect this repository and click **Apply**.
+1.  **Dashboard**: In the [Render Dashboard](https://dashboard.render.com), click **New > Web Service**.
+2.  **Connect Repo**: Connect your `http-nu` repository.
+3.  **Service Settings**:
+    -   **Runtime**: Select **Docker** (Crucial: Do not use the default Rust runtime).
+    -   **Plan**: Select **Free**.
+4.  **Environment Variables**: Add `LOG_FORMAT=jsonl`.
+5.  **Deploy**: Click **Create Web Service**.
+
+> [!IMPORTANT]
+> **Free Tier Limitation**: Render's free plan does not support persistent disks. The **Quotes** example will function, but data will be ephemeral and reset on every deployment or server restart.
 
 ### Features
+-   **Automatic Dockerization**: Uses the multi-stage Dockerfile for an optimized, minimal runtime.
+-   **Multi-Example Routing**: All examples (Basic, Quotes, Datastar, etc.) are live at `/examples/*`.
+-   **Health Checks**: Render automatically monitors the `/health` endpoint for availability.
 
--   **Automatic Dockerization**: Built using a multi-stage Dockerfile for speed and efficiency.
--   **Multi-Example Routing**: All examples (Basic, Quotes, Datastar, etc.) are automatically mounted under `/examples/*` (e.g., `/examples/basic`).
--   **Persistent State**: A 1GB persistent disk is provisioned at `/data` for the cross-stream store (required by the `quotes` example).
--   **Health Checks**: Fully integrated health monitoring via the `/health` endpoint.
--   **Professional UI**: A landing page at the root URL provides a dashboard for all examples.
-
-For a full step-by-step walkthrough and technical details, see the [Deployment Summary](.agent/artifacts/DEPLOYMENT_SUMMARY.md) or the [Checklist](.agent/artifacts/RENDER_DEPLOYMENT_CHECKLIST.md).
+For technical details, see the [Deployment Summary](.agent/artifacts/DEPLOYMENT_SUMMARY.md).
 
 ## History
 
