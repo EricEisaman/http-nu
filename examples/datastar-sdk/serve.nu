@@ -69,8 +69,8 @@ use http-nu/html *
     # Increment counter signal
     (
       route {method: POST path: "/increment"} {|req ctx|
-        let txt = ($in | into binary | decode utf-8)
-        let body = if ($txt | is-empty) { "{}" } else { $txt }
+        let raw = $in
+        let body = if ($raw | is-empty) { "{}" } else { $raw | decode utf-8 }
         let signals = ($body | from datastar-signals $req)
         let count = ($signals.count? | default 0) + 1
         {count: $count} | to datastar-patch-signals | to sse
