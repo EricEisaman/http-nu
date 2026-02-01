@@ -1,7 +1,8 @@
 use http-nu/html *
 
 {|req|
-  let body = ($in | into binary | decode utf-8)
+  let raw = $in
+  let body = if ($raw | is-empty) { "" } else { $raw | decode utf-8 }
   match $req.path {
     # Home page
     "/" => {
