@@ -1,13 +1,23 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Default{% endblock %} - http-nu</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="/assets/core.css">
 </head>
-<body class="p-8 max-w-2xl mx-auto">
+
+<body class="p-8 max-w-4xl mx-auto flex flex-col items-center">
     {% block content %}{% endblock %}
-    <footer class="mt-12 pt-8 border-t border-white border-opacity-10 opacity-60">
-        <a href="../">← Back to Examples</a>
+    <footer class="mt-12 pt-8 border-t border-white border-opacity-10 opacity-60 w-full text-center">
+        <a href="../" class="hover:text-white transition-colors">← Back to Examples</a>
     </footer>
 </body>
+
 </html>

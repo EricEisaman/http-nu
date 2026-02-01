@@ -1,6 +1,23 @@
 {% extends "base.html" %}
-{% block title %}My Page{% endblock %}
+
+{% block title %}Template Demo{% endblock %}
+
 {% block content %}
+<header class="mb-12 text-center">
+    <h1 class="text-4xl font-bold tracking-wide text-header shadow-offset rotate-ccw-1 mb-4">Template Inheritance</h1>
+    <p class="opacity-80">Composing pages with Minijinja templates</p>
+</header>
+
 {% include "nav.html" %}
-<main>Hello {{ name }}</main>
+
+<div class="bg-dark p-8 rounded-lg shadow-float border border-purple w-full">
+    <h2 class="text-2xl font-bold text-accent mb-4">Dynamic Content</h2>
+    <p class="text-xl leading-relaxed">
+        Hello <span class="bg-orange text-white px-2 py-1 rounded font-mono font-bold">{{ name }}</span>!
+    </p>
+    <p class="mt-4 opacity-70">
+        This page demonstrates how <code>base.html</code> provides the layout, while <code>page.html</code> injects
+        content and includes <code>nav.html</code>.
+    </p>
+</div>
 {% endblock %}
