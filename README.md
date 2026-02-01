@@ -73,7 +73,7 @@
   - [Available Build Targets](#available-build-targets)
   - [Examples](#examples)
   - [GitHub Releases](#github-releases)
-- [Deployment to Render.com](#deployment-to-render-com)
+- [Render Deployment](#render-deployment)
 - [History](#history)
 
 <!-- END mktoc -->
@@ -985,19 +985,25 @@ The GitHub workflow automatically builds all platforms and creates releases when
 you push a version tag (e.g., `v1.0.0`). Development tags containing `-dev.` are
 marked as prereleases.
 
-## Deployment to Render.com
+## Render Deployment
 
-Deploying `http-nu` to Render is automated via the included `render.yaml` Blueprint.
+`http-nu` is optimized for zero-config deployment on **Render.com** using the included [Blueprint configuration](render.yaml).
 
-1.  **Push** this repository to your GitHub account.
-2.  In the [Render Dashboard](https://dashboard.render.com), click **New > Blueprint**.
-3.  Connect your repository.
-4.  Render will automatically deploy the service with:
-    -   **Multi-Example Routing**: All examples are live at `/examples/*` (e.g., `/examples/basic`).
-    -   **State Persistence**: A 1GB disk is mounted for the cross-stream store.
-    -   **Health Probes**: Automatic monitoring via `/health`.
+### Quick Start
 
-For a full step-by-step guide, see [RENDER_DEPLOYMENT_CHECKLIST.md](.agent/artifacts/RENDER_DEPLOYMENT_CHECKLIST.md).
+1.  **Fork/Push**: Ensure this repository is on your GitHub account.
+2.  **Blueprint**: From the [Render Dashboard](https://dashboard.render.com), select **New > Blueprint**.
+3.  **Connect**: Connect this repository and click **Apply**.
+
+### Features
+
+-   **Automatic Dockerization**: Built using a multi-stage Dockerfile for speed and efficiency.
+-   **Multi-Example Routing**: All examples (Basic, Quotes, Datastar, etc.) are automatically mounted under `/examples/*` (e.g., `/examples/basic`).
+-   **Persistent State**: A 1GB persistent disk is provisioned at `/data` for the cross-stream store (required by the `quotes` example).
+-   **Health Checks**: Fully integrated health monitoring via the `/health` endpoint.
+-   **Professional UI**: A landing page at the root URL provides a dashboard for all examples.
+
+For a full step-by-step walkthrough and technical details, see the [Deployment Summary](.agent/artifacts/DEPLOYMENT_SUMMARY.md) or the [Checklist](.agent/artifacts/RENDER_DEPLOYMENT_CHECKLIST.md).
 
 ## History
 
