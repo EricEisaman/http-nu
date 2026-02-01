@@ -57,3 +57,35 @@ For detailed guidance on specific topics:
 - Build release: `cargo build --release`
 - Docker build: `docker build -t http-nu .`
 - Tests: `cargo test`
+
+## Common Pitfalls & Best Practices (Lessons Learned)
+
+### 1. Nushell Streaming Semantics
+**Problem:** `$in` is a stream and can only be consumed once. Using it multiple times (e.g., parsing JSON AND using it as metadata) will result in data loss or empty values.
+**Solution:** Always capture `$in` to a variable if we need it more than once.
+```nu
+let body = ($in | decode utf-8) # Capture first!
+$body | from json | ...
+... metadata $body
+```
+
+### 2. Loose Type Signatures
+**Problem:** Strict Nushell return types (e.g., `-> record`) in helper functions can cause parse errors or runtime failures if the pipeline input is slightly different (e.g. `any` or `nothing`).
+**Solution:** Prefer omitting type signatures or using `any` for internal helper functions unless strict contract validation is explicitly needed.
+
+### 3. Static Assets & Docker
+**Problem:** Static files (like `www/`) failing to appear in production.
+**Solution:**
+- Always check `.dockerignore` when adding new asset directories.
+- `Dockerfile` `COPY` commands respect `.dockerignore`, so what's ignored won't be copied even if explicitly requested.
+
+### 4. Aesthetics are Critical
+**Problem:** "Basic" styling is insufficient.
+**Solution:** ALWAYS use the `core.css` design system.
+- Use `shadow-offset`, `shadow-float`, `rotate-ccw-1` for the "Retro/Sticker" look.
+- Use `text-header`, `bg-dark`, `text-accent` color tokens.
+- Never rely on browser defaults.
+
+### 5. Datastar Robustness
+**Problem:** Datastar helpers failing on different input types.
+**Solution:** Helper functions like `from datastar-signals` must accept `any` input to handle potential raw binary streams, strings, or pre-parsed records.
