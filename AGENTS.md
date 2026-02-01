@@ -60,44 +60,39 @@ For detailed guidance on specific topics:
 
 ## Common Pitfalls & Best Practices (Lessons Learned)
 
-## Common Pitfalls & Best Practices (Lessons Learned)
-
 ### 1. Nushell Streaming Semantics & Body Decoding
-**Problem:** `$in` is a stream and can only be consumed once. Attempting to check `is-empty` consumes the stream, causing panic on subsequent access.
-**Solution:** Use single-pass consumption with `into binary` to handle both empty and populated streams safely.
+**Problem:** `$in` is a stream and can only be consumed once. Attempting to check `is-empty` consumes the stream, causing panic on subsequent access. Even `into binary` can fail if the stream is empty or handled incorrectly in a pipeline.
+**Solution:** Capture the raw input to a variable first, then check/decode.
 ```nu
-# BAD: Checking is-empty consumes the stream!
-let body = ($in | if ($in | is-empty) { "" } else { $in | decode utf-8 })
+# BAD: Consumes stream twice or fails on empty
+let body = ($in | if ($in | is-empty) { "" } else { ... })
 
-# GOOD: Single-pass consumption
-let body = ($in | into binary | decode utf-8)
+# GOOD: Safe Single-Pass Capture
+let raw = $in
+let body = if ($raw | is-empty) { "" } else { $raw | decode utf-8 }
 ```
-**Impact:** Prevents "channel closed" errors and 500 crashes on GET requests or empty bodies.
+**Impact:** Prevents "channel closed" panics and 500 errors.
 
-### 2. Mobile Overscroll & Design System
-**Problem:** "Elastic scrolling" reveals the white browser background, breaking the immersive dark theme.
-**Solution:** 
-- In `core.css`: Set `html { background-color: var(--color-bg-body); overscroll-behavior: none; }`.
-- Always verify padding! Large styling (`p-8`) requires corresponding utility classes in `core.css`.
-- Use the full design system (`shadow-offset`, `rotate-ccw-1`) even for "basic" templates.
+### 2. Datastar Stability
+**Problem:** `FetchNoUrlProvided` errors or race conditions on load.
+**Solution:**
+- Use relative path `.` for current URL: `@get('.')`.
+- Use delayed triggers for initialization to ensure the DOM is ready: `data-on-load__delay.1s`.
+- Defensively handle empty bodies in handlers (see Point 1).
 
-### 3. Datastar & Relative URLs
-**Problem:** `FetchNoUrlProvided` error when using empty string for actions.
-**Solution:** Use relative path `.` instead of empty string `''`.
-```nu
-# BAD
-data-on-load: "@get('')"
-
-# GOOD
-data-on-load: "@get('.')"
-```
+### 3. Visual Consistency & Mobile
+**Problem:** "White screen of death" on raw text responses or white flash on scroll.
+**Solution:**
+- **NEVER return raw strings.** Always package responses in the `HTML [ ... ]` layout, even for simple debug/echo endpoints.
+- **Mobile Polish:** Set `html { background-color: var(--color-bg-body); overscroll-behavior: none; }` in CSS to prevent the "elastic scroll" white flash.
+- **Favicons:** Always include the full set of favicon/icon links in every `HEAD` block.
 
 ### 4. Static Assets & Docker
 **Problem:** Static files (like `www/`) failing to appear in production.
 **Solution:**
 - Always check `.dockerignore` when adding new asset directories.
-- `Dockerfile` `COPY` commands respect `.dockerignore`, so what's ignored won't be copied even if explicitly requested.
+- `Dockerfile` `COPY` commands respect `.dockerignore`.
 
 ### 5. Loose Type Signatures
 **Problem:** Strict Nushell return types (e.g., `-> record`) in helper functions can cause parse errors if the pipeline input varies (e.g. `any` vs `nothing`).
-**Solution:** Prefer omitting type signatures or using `any` for internal helper functions unless strict contract validation is explicitly needed.
+**Solution:** Prefer omitting type signatures or using `any` for internal helper functions.
