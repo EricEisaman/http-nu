@@ -23,7 +23,7 @@ def quote-html [] {
 {|req|
   dispatch $req [
     (
-      route {method: GET path: "/" has-header: {accept: "text/event-stream"}} {|req ctx|
+      route {|req| $req.method == "GET" and $req.path == "/" and $req.query.stream? == "true"} {|req ctx|
         .head quotes --follow
         | each {|frame|
           $frame.meta | quote-html | to datastar-patch-elements
@@ -56,7 +56,7 @@ def quote-html [] {
             (SCRIPT {type: "module" src: $DATASTAR_CDN_URL})
           )
           (
-            BODY {data-on-load__delay.1s: "@get('.')", class: "p-4"}
+            BODY {data-on-load__delay.1s: "@get('?stream=true')", class: "p-4"}
             (DIV {class: "max-w-4xl mx-auto"} [
                (HEADER {class: "mb-12 pt-12 text-center"} [
                  (H1 {class: "text-4xl font-bold tracking-wide text-header shadow-offset rotate-ccw-1"} "Live Quotes")
