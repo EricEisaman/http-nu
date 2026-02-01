@@ -4,7 +4,10 @@
 # ============================================================================
 # Stage 1: Dependency Planner (cargo-chef)
 # ============================================================================
-FROM lukemathwalker/cargo-chef:latest-rust-1.88-slim-bookworm AS chef
+FROM rust:slim-bookworm AS chef
+
+# Install cargo-chef for dependency caching
+RUN cargo install cargo-chef
 
 WORKDIR /app
 
