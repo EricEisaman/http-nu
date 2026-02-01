@@ -167,7 +167,7 @@ def strip-prefix [prefix: string]: record -> record {
         ])
         (BODY [
           (DIV {class: "container"} [
-            (TAG "header" [
+            (HEADER [
               (H1 "http-nu Examples")
               (P "The surprisingly performant, Datastar-ready, Nushell-scriptable HTTP server")
             ])
@@ -250,7 +250,7 @@ def strip-prefix [prefix: string]: record -> record {
               ])
             ])
             
-            (TAG "footer" [
+            (FOOTER [
               (P [
                 "Powered by "
                 (A {href: "https://github.com/cablehead/http-nu"} "http-nu")
