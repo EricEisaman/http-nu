@@ -1,7 +1,7 @@
 use http-nu/html *
 
 {|req|
-  let body = $in
+  let body = ($in | decode utf-8)
   match $req.path {
     # Home page
     "/" => {
