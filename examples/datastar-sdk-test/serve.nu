@@ -55,11 +55,25 @@ def handle-event [event: record] {
 
     (
       route {path: "/"} {|req ctx|
-        "<html><body>
-          <h1>Datastar SDK Test Endpoint</h1>
-          <p>This endpoint is used for running the Datastar SDK compliance tests.</p>
-          <p>The test runner should point to <code>/test</code>.</p>
-        </body></html>"
+        use http-nu/html *
+        HTML [
+          (HEAD [
+            (TITLE "Datastar SDK Tests - http-nu")
+            (LINK {rel: "stylesheet" href: "/assets/core.css"})
+          ])
+          (BODY {class: "p-8 max-w-2xl mx-auto"} [
+            (HEADER {class: "mb-12"} [
+              (H1 {class: "text-4xl font-bold tracking-wide text-header shadow-offset rotate-ccw-1"} "Datastar SDK Tests")
+            ])
+            (DIV {class: "bg-dark p-6 rounded-lg shadow-float mb-8"} [
+              (P "This endpoint is used for running the Datastar SDK compliance tests.")
+              (P [ "The automated test runner should point to " (CODE "/test") "." ])
+            ])
+            (FOOTER {class: "mt-12 pt-8 border-t border-white border-opacity-10"} [
+              (A {href: "../", class: "opacity-60"} "← Back to Examples")
+            ])
+          ])
+        ] | get __html
       }
     )
   ]

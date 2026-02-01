@@ -1,7 +1,13 @@
 <!DOCTYPE html>
 <html>
-<head><title>{% block title %}Default{% endblock %}</title></head>
-<body>
-{% block content %}{% endblock %}
+<head>
+    <title>{% block title %}Default{% endblock %} - http-nu</title>
+    <link rel="stylesheet" href="/assets/core.css">
+</head>
+<body class="p-8 max-w-2xl mx-auto">
+    {% block content %}{% endblock %}
+    <footer class="mt-12 pt-8 border-t border-white border-opacity-10 opacity-60">
+        <a href="../">← Back to Examples</a>
+    </footer>
 </body>
 </html>

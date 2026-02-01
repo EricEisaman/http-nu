@@ -79,6 +79,9 @@ COPY --from=builder /app/target/release/http-nu /usr/local/bin/http-nu
 # Copy examples directory (all examples with their handlers)
 COPY examples /app/examples
 
+# Copy www directory (assets for the landing page)
+COPY www /app/www
+
 # Copy production handler
 COPY serve.nu /app/serve.nu
 

@@ -7,37 +7,16 @@ def quote-html []: record -> record {
   (
     DIV {
       id: "quote"
-      style: {
-        background-color: "#e8e6e3"
-        color: "#4a4a4a"
-        height: 100dvh
-        padding: "5vh 10vw"
-        font-size: 6vmax
-        display: flex
-        flex-direction: column
-        justify-content: center
-        overflow: hidden
-      }
-    }
-    (
-      P {
-        style: {
-          font-family: "Georgia, serif"
-          font-style: italic
-          text-align: center
-        }
-      } $"\"($q.quote)\""
-    )
-    (
-      P {
-        style: {
-          font-family: "'American Typewriter', Courier, monospace"
-          font-size: 4vmax
-          text-align: right
-          margin-top: 10vh
-        }
-      } $"— ($q.who? | default 'Anonymous')"
-    )
+      class: "flex flex-col items-center justify-center p-8 text-center h-[70vh]"
+    } [
+      (P {
+        class: "text-fluid-xl font-bold text-header leading-tight mb-8"
+        style: { transition: "all 0.5s ease" }
+      } $"\"($q.quote)\"")
+      (P {
+        class: "text-2xl opacity-60 font-mono"
+      } $"— ($q.who? | default 'Anonymous')")
+    ]
   )
 }
 
@@ -68,13 +47,24 @@ def quote-html []: record -> record {
           (
             HEAD
             (META {charset: "utf-8"})
-            (TITLE "Live Quotes")
-            (STYLE "* { box-sizing: border-box; margin: 0; }")
+            (TITLE "Live Quotes - http-nu")
+            (LINK {rel: "stylesheet" href: "/assets/core.css"})
             (SCRIPT {type: "module" src: $DATASTAR_CDN_URL})
           )
           (
-            BODY {data-init: "@get('')"}
-            ({quote: "Waiting for quotes..."} | quote-html)
+            BODY {data-init: "@get('')", class: "p-4"}
+            (DIV {class: "max-w-4xl mx-auto"} [
+               (HEADER {class: "mb-12 pt-12 text-center"} [
+                 (H1 {class: "text-4xl font-bold tracking-wide text-header shadow-offset rotate-ccw-1"} "Live Quotes")
+                 (P {class: "opacity-80 mt-2"} "Streaming real-time insights from the Nushell store")
+               ])
+               (DIV {class: "bg-dark rounded-lg shadow-float border border-white border-opacity-10 min-h-[50vh] flex items-center justify-center"} [
+                 ({quote: "Waiting for quotes..."} | quote-html)
+               ])
+               (FOOTER {class: "mt-12 pt-8 border-t border-white border-opacity-10 text-center"} [
+                 (A {href: "../", class: "opacity-60"} "← Back to Examples")
+               ])
+            ])
           )
         )
       }
