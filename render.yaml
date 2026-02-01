@@ -1,0 +1,91 @@
+services:
+  # Main web service running http-nu with all examples
+  - type: web
+    name: http-nu
+    runtime: docker
+    
+    # Repository configuration
+    repo: https://github.com/EricEisaman/http-nu
+    branch: main
+    
+    # Docker configuration
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    
+    # Instance configuration
+    plan: starter  # $7/month - always on, no sleep
+    region: oregon  # Choose: oregon, frankfurt, singapore, ohio, virginia
+    
+    # Auto-deploy on git push
+    autoDeploy: true
+    
+    # Health check configuration
+    healthCheckPath: /health
+    
+    # Environment variables
+    envVars:
+      - key: LOG_FORMAT
+        value: jsonl
+      
+      - key: RUST_LOG
+        value: info
+      
+      # PORT is automatically set by Render
+      # No need to define it here
+    
+    # Persistent disk for cross-stream store (required for quotes example)
+    disk:
+      name: http-nu-store
+      mountPath: /data
+      sizeGB: 1
+    
+    # Build filters - only rebuild when relevant files change
+    buildFilter:
+      paths:
+        - src/**
+        - examples/**
+        - Cargo.toml
+        - Cargo.lock
+        - Dockerfile
+        - serve.nu
+        - build.rs
+        - syntaxes/**
+      ignoredPaths:
+        - docs/**
+        - tests/**
+        - benchmarks/**
+        - "*.md"
+        - .github/**
+        - .dagger/**
+        - scripts/**
+
+# Notes:
+# 1. Update the 'repo' field with your GitHub repository URL
+# 2. The Dockerfile must be at the repository root
+# 3. The serve.nu file mounts all examples at /examples/* endpoints
+# 4. PORT environment variable is automatically set by Render
+# 5. Health checks run against /health endpoint every 30 seconds
+# 6. The disk volume persists the cross-stream store for the quotes example
+# 7. Free tier services sleep after 15 minutes of inactivity
+# 8. Starter tier ($7/month) services are always on
+#
+# Example URLs after deployment:
+# - https://http-nu.onrender.com/                    (Landing page)
+# - https://http-nu.onrender.com/health              (Health check)
+# - https://http-nu.onrender.com/examples/basic      (Basic example)
+# - https://http-nu.onrender.com/examples/quotes     (Quotes with SSE)
+# - https://http-nu.onrender.com/examples/datastar   (Datastar SDK)
+# - https://http-nu.onrender.com/examples/datastar-test
+# - https://http-nu.onrender.com/examples/templates  (Minijinja templates)
+#
+# To deploy:
+# 1. Update the 'repo' field above with your repository URL
+# 2. Ensure Dockerfile, serve.nu, and examples/ are in your repository
+# 3. Commit and push this render.yaml to your repository
+# 4. Go to https://dashboard.render.com
+# 5. Click "New" → "Blueprint"
+# 6. Connect your repository
+# 7. Review and apply the Blueprint
+#
+# The service will automatically redeploy on every push to main that modifies
+# files matching the buildFilter paths.

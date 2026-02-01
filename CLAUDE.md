@@ -1,3 +1,9 @@
+# Claude Code Configuration
+
+For project-level guidance (architecture, patterns, testing), see [AGENTS.md](./AGENTS.md).
+
+This file contains personal preferences for working with this repository.
+
 ## Git Commit Style Preferences
 
 **NEVER commit unless explicitly asked by the user.**
