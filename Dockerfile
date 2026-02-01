@@ -4,23 +4,17 @@
 # ============================================================================
 # Stage 1: Dependency Planner (cargo-chef)
 # ============================================================================
-FROM rust:1.88-slim-bookworm AS chef
-
-# Install cargo-chef for dependency caching
-RUN cargo install cargo-chef
+FROM lukemathwalker/cargo-chef:latest-rust-1.88-slim-bookworm AS chef
 
 WORKDIR /app
 
 # ============================================================================
-# Stage 2: Dependency Builder
+# Stage 2: Dependency Planner execution
 # ============================================================================
 FROM chef AS planner
 
-# Copy only the files needed to compute dependencies
-COPY Cargo.toml Cargo.lock ./
-COPY src ./src
-COPY build.rs ./
-COPY syntaxes ./syntaxes
+# Copy all files to ensure all workspace members' Cargo.toml files are present
+COPY . .
 
 # Generate dependency recipe
 RUN cargo chef prepare --recipe-path recipe.json
@@ -49,10 +43,7 @@ FROM dependencies AS builder
 WORKDIR /app
 
 # Copy source code
-COPY Cargo.toml Cargo.lock ./
-COPY src ./src
-COPY build.rs ./
-COPY syntaxes ./syntaxes
+COPY . .
 
 # Build the application
 # Note: LTO and codegen-units are already configured in Cargo.toml
